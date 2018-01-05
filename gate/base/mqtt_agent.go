@@ -156,12 +156,12 @@ func (a *agent) OnRecover(pack *mqtt.Pack) {
 		case module.ProtocolMarshal:
 			return a.WriteMsg(Topic, v2.GetData())
 		}
-		b, err := a.module.GetApp().ProtocolMarshal(Result, Error)
+		b, err := a.module.GetApp().ProtocolMarshal(a.session, Topic, Result, Error)
 		if err == "" {
 			return a.WriteMsg(Topic, b.GetData())
 		} else {
 			log.Error(err)
-			br, _ := a.module.GetApp().ProtocolMarshal(nil, err)
+			br, _ := a.module.GetApp().ProtocolMarshal(a.session, Topic, nil, err)
 			return a.WriteMsg(Topic, br.GetData())
 		}
 		return fmt.Errorf(err)

@@ -77,11 +77,11 @@ type App interface {
 
 	SetJudgeGuest(judgeGuest func(session gate.Session) bool) error
 
-	SetProtocolMarshal(protocolMarshal func(Result interface{}, Error string) (ProtocolMarshal, string)) error
+	SetProtocolMarshal(protocolMarshal func(session gate.Session, topic string, Result interface{}, Error string) (ProtocolMarshal, string)) error
 	/**
 	与客户端通信的协议包接口
 	*/
-	ProtocolMarshal(Result interface{}, Error string) (ProtocolMarshal, string)
+	ProtocolMarshal(session gate.Session, topic string, Result interface{}, Error string) (ProtocolMarshal, string)
 	NewProtocolMarshal(data []byte) ProtocolMarshal
 	GetProcessID() string
 }

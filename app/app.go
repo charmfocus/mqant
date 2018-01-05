@@ -80,7 +80,7 @@ type DefaultApp struct {
 	startup             func(app module.App)
 	moduleInited        func(app module.App, module module.Module)
 	judgeGuest          func(session gate.Session) bool
-	protocolMarshal     func(Result interface{}, Error string) (module.ProtocolMarshal, string)
+	protocolMarshal     func(session gate.Session, topic string, Result interface{}, Error string) (module.ProtocolMarshal, string)
 }
 
 func (app *DefaultApp) Run(debug bool, mods ...module.Module) error {
@@ -364,14 +364,14 @@ func (app *DefaultApp) SetJudgeGuest(_func func(session gate.Session) bool) erro
 	return nil
 }
 
-func (app *DefaultApp) SetProtocolMarshal(protocolMarshal func(Result interface{}, Error string) (module.ProtocolMarshal, string)) error {
+func (app *DefaultApp) SetProtocolMarshal(protocolMarshal func(session gate.Session, topic string, Result interface{}, Error string) (module.ProtocolMarshal, string)) error {
 	app.protocolMarshal = protocolMarshal
 	return nil
 }
 
-func (app *DefaultApp) ProtocolMarshal(Result interface{}, Error string) (module.ProtocolMarshal, string) {
+func (app *DefaultApp) ProtocolMarshal(session gate.Session, topic string, Result interface{}, Error string) (module.ProtocolMarshal, string) {
 	if app.protocolMarshal != nil {
-		return app.protocolMarshal(Result, Error)
+		return app.protocolMarshal(session, topic, Result, Error)
 	}
 	r := &resultInfo{
 		Error:  Error,
